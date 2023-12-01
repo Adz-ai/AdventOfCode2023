@@ -1,7 +1,6 @@
-import re
-from pathlib import Path
 import os.path
-import num2words
+from pathlib import Path
+
 from word2number import w2n
 
 
@@ -71,7 +70,7 @@ def part_2(file):
             if reverse_temp[0] != 'None':
                 number = temp[0] + reverse_temp[0]
             else:
-                number = temp[0] + temp[len(temp)-1]
+                number = temp[0] + temp[len(temp) - 1]
         else:
             number = temp[0] + temp[0]
         final_numbers.append(int(number))
