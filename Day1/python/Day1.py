@@ -43,7 +43,6 @@ def part_2(file):
     rev_num_in_str = [element[::-1] for element in num_in_str]
     data = path(file)
     final_numbers = []
-    reverse_final_numbers = []
     for element in data:
         temp = []
         reverse_temp = []
@@ -74,7 +73,6 @@ def part_2(file):
         else:
             number = temp[0] + temp[0]
         final_numbers.append(int(number))
-    print(f"FINal : {final_numbers}")
     return sum(final_numbers)
 
 
