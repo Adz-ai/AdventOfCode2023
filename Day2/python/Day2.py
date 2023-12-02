@@ -26,25 +26,15 @@ def setup(file):
 
 def part_1(file):
     cleaned_data, counter, power, tracker = setup(file)
-    for element in cleaned_data:
-        counter += 1
-        game_set = str(element).split(";")
-        p = 0
-        for game in game_set:
-            g = str(game).split(",")
-            checkcase = 0
-            for c in g:
-                a = str(c).strip().split(" ")
-                if a[1] == 'red' and int(a[0]) < 13:
-                    checkcase += 1
-                if a[1] == 'green' and int(a[0]) < 14:
-                    checkcase += 1
-                if a[1] == 'blue' and int(a[0]) < 15:
-                    checkcase += 1
-                if checkcase == len(g):
-                    p += 1
-            if p == len(game_set):
-                tracker.append(counter)
+    color_thresholds = {'red': 13, 'green': 14, 'blue': 15}
+    for index, element in enumerate(cleaned_data, start=1):
+        game_set = [game.split(",") for game in element.split(";")]
+        if all(
+                all(int(value) < color_thresholds.get(color, float('inf')) for value, color in
+                    (c.strip().split() for c in game))
+                for game in game_set
+        ):
+            tracker.append(index)
     return sum(tracker)
 
 
@@ -52,21 +42,14 @@ def part_2(file):
     cleaned_data, counter, power, tracker = setup(file)
     for element in cleaned_data:
         counter += 1
-        game_set = str(element).split(";")
-        max_red = 0
-        max_green = 0
-        max_blue = 0
+        game_set = [game.split(",") for game in str(element).split(";")]
+        colors = {'red': 0, 'green': 0, 'blue': 0}
         for game in game_set:
-            g = str(game).split(",")
-            for c in g:
-                a = str(c).strip().split(" ")
-                if a[1] == 'red' and int(a[0]) > max_red:
-                    max_red = int(a[0])
-                if a[1] == 'green' and int(a[0]) > max_green:
-                    max_green = int(a[0])
-                if a[1] == 'blue' and int(a[0]) > max_blue:
-                    max_blue = int(a[0])
-        power += max_red * max_green * max_blue
+            for c in game:
+                value, color = map(str.strip, c.split())
+                if color in colors:
+                    colors[color] = max(colors[color], int(value))
+        power += colors['red'] * colors['green'] * colors['blue']
     return power
 
 
