@@ -11,10 +11,8 @@ def path(file):
 
 
 def read_file(file: str) -> list:
-    file_obj = open(file, "r")
-    file_data = file_obj.read()
-    data = file_data.splitlines()
-    file_obj.close()
+    data = open(file, "r").read().splitlines()
+    open(file, "r").close()
     return data
 
 
