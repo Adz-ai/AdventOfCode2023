@@ -1,98 +1,75 @@
+from math import prod
+
 from common.common import path
 
 
 def sum_part_numbers(grid):
     SYMBOLS = "!@#$%^&*()_+-=][{}|:;/?<>"
-    total_sum = 0
+    sum = 0
+
+    def extract_number(i, j):
+        num_str = grid[i][j]
+        k = 1
+        while j + k < len(grid[0]) and grid[i][j + k].isdigit():
+            num_str += grid[i][j + k]
+            k += 1
+        return int(num_str), j + k - 1
+
+    def is_adjacent_to_symbol(i, j_start, j_end):
+        for di in range(-1, 2):
+            for dj in range(-1, 2):
+                for j in range(j_start, j_end + 1):
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < len(grid) and 0 <= nj < len(grid[0]) and grid[ni][nj] in SYMBOLS:
+                        return True
+        return False
+
     for i, row in enumerate(grid):
-        index = 0
-        while index < len(row):
-            if row[index].isdigit():
-                num_str, positions = row[index], [index]
-                index += 1
-                while index < len(row) and row[index].isdigit():
-                    num_str += row[index]
-                    positions.append(index)
-                    index += 1
-                num = int(num_str)
-                adjacent_chars = []
-                if positions[0] != 0:
-                    adjacent_chars.append(grid[i][positions[0] - 1])
-                if positions[-1] + 1 < len(row):
-                    adjacent_chars.append(grid[i][positions[-1] + 1])
-                for pos in positions:
-                    if i != 0:
-                        adjacent_chars.append(grid[i - 1][pos])
-                    if i + 1 < len(grid):
-                        adjacent_chars.append(grid[i + 1][pos])
-                if positions[0] != 0 and i != 0:
-                    adjacent_chars.append(grid[i - 1][positions[0] - 1])
-                if positions[-1] + 1 < len(row) and i != 0:
-                    adjacent_chars.append(grid[i - 1][positions[-1] + 1])
-                if positions[0] != 0 and i + 1 < len(grid):
-                    adjacent_chars.append(grid[i + 1][positions[0] - 1])
-                if positions[-1] + 1 < len(row) and i + 1 < len(grid):
-                    adjacent_chars.append(grid[i + 1][positions[-1] + 1])
-                if any(char in SYMBOLS for char in adjacent_chars):
-                    total_sum += num
-            else:
-                index += 1
-    return total_sum
+        j = 0
+        while j < len(row):
+            if row[j].isdigit():
+                num, j_end = extract_number(i, j)
+                if is_adjacent_to_symbol(i, j, j_end):
+                    sum += num
+                j = j_end
+            j += 1
+    return sum
 
 
 def sum_gear_ratios(grid):
     SYMBOL = "*"
     gears = {}
-    sum_of_gear_ratios = 0
+    sum_of_gears = 0
+
+    def extract_number(i, j):
+        num_str = grid[i][j]
+        k = 1
+        while j + k < len(grid[0]) and grid[i][j + k].isdigit():
+            num_str += grid[i][j + k]
+            k += 1
+        return int(num_str), j + k - 1
+
+    def update_gears(i, j, num):
+        for di in range(-1, 2):
+            for dj in range(-1, 2):
+                ni, nj = i + di, j + dj
+                if 0 <= ni < len(grid) and 0 <= nj < len(grid[0]) and grid[ni][nj] == SYMBOL:
+                    gears.setdefault((ni, nj), set()).add(num)
+
     for i, row in enumerate(grid):
-        index = 0
-        while index < len(row):
-            if row[index].isnumeric():
-                positions = []
-                num = row[index]
-                positions.append(index)
-                index += 1
-                while index < len(row) and row[index].isnumeric():
-                    num += row[index]
-                    positions.append(index)
-                    index += 1
-                num = int(num)
-                adjacent_chars_pos = []
-                if positions[0] != 0:
-                    adjacent_chars_pos.append((i, positions[0] - 1))
-                if positions[0] != 0 and i != 0:
-                    adjacent_chars_pos.append((i - 1, positions[0] - 1))
-                if positions[-1] + 1 != len(row) and i != 0:
-                    adjacent_chars_pos.append((i - 1, positions[-1] + 1))
-                if positions[-1] + 1 != len(row):
-                    adjacent_chars_pos.append((i, positions[-1] + 1))
-                if positions[-1] + 1 != len(row) and i + 1 != len(grid):
-                    adjacent_chars_pos.append((i + 1, positions[-1] + 1))
-                if positions[0] != 0 and i + 1 != len(grid):
-                    adjacent_chars_pos.append((i + 1, positions[0] - 1))
-                if len(positions) == 1:
-                    if i != 0:  # above
-                        adjacent_chars_pos.append((i - 1, positions[0]))
-                    if i + 1 != len(grid):  # below
-                        adjacent_chars_pos.append((i + 1, positions[0]))
-                elif len(positions) > 1:
-                    if i != 0:
-                        adjacent_chars_pos.extend([(i - 1, pos) for pos in positions])
-                    if i + 1 != len(grid):  # below
-                        adjacent_chars_pos.extend([(i + 1, pos) for pos in positions])
-                for pos in adjacent_chars_pos:
-                    if grid[pos[0]][pos[1]] == SYMBOL:
-                        if pos in gears:
-                            gears[pos].append(num)
-                        else:
-                            gears[pos] = [num]
-            else:
-                index += 1
-    for nums in gears.values():
-        if len(nums) == 2:
-            gear_ratio = nums[0] * nums[1]
-            sum_of_gear_ratios += gear_ratio
-    return sum_of_gear_ratios
+        j = 0
+        while j < len(row):
+            if row[j].isdigit():
+                num, j_end = extract_number(i, j)
+                update_gears(i, j, num)
+                update_gears(i, j_end, num)
+                j = j_end
+            j += 1
+    for gear_nums in gears.values():
+        if len(gear_nums) == 2:
+            sum_of_gears += prod(gear_nums)
+
+    return sum_of_gears
 
 
 def part_1(file):
