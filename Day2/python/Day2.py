@@ -1,22 +1,10 @@
-import os
 import re
-from pathlib import Path
 
-
-def path(file):
-    base_path = os.path.dirname(Path(__file__).parent)
-    data = read_file(os.path.join(base_path, "PuzzleInputFiles", file))
-    return data
-
-
-def read_file(file: str) -> list:
-    data = open(file, "r").read().splitlines()
-    open(file, "r").close()
-    return data
+from common.common import path
 
 
 def setup(file):
-    data = path(file)
+    data = path(file,"Day2")
     cleaned_data = [re.sub(r"Game \d+: ", "", game) for game in data]
     counter = 0
     power = 0

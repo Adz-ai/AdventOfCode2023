@@ -1,19 +1,6 @@
-import os.path
-from pathlib import Path
-
 from word2number import w2n
 
-
-def path(file):
-    base_path = os.path.dirname(Path(__file__).parent)
-    data = read_file(os.path.join(base_path, "PuzzleInputFiles", file))
-    return data
-
-
-def read_file(file: str) -> list:
-    data = open(file, "r").read().splitlines()
-    open(file, "r").close()
-    return data
+from common.common import path
 
 
 def find_number_in_string(s, reverse: bool):
@@ -39,7 +26,7 @@ def find_number_in_string(s, reverse: bool):
 def part_2(file):
     num_in_str = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
     rev_num_in_str = [element[::-1] for element in num_in_str]
-    data = path(file)
+    data = path(file,"Day1")
     final_numbers = []
     for element in data:
         temp = []
@@ -75,7 +62,7 @@ def part_2(file):
 
 
 def part_1(file):
-    data = path(file)
+    data = path(file,"Day1")
     final_numbers = []
     for element in data:
         temp = []
