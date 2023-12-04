@@ -19,10 +19,7 @@ def part_1(file):
 
 def part_2(file):
     data = path(file, "Day4")
-    cards = [line.strip() for line in data]
-    cards = [(line.split('|')[0].split(), line.split('|')[1].split()) for line in cards]
-    cards = [([int(num) for num in card[0] if num.isdigit()], [int(num) for num in card[1] if num.isdigit()]) for card
-             in cards]
+    cards = [([int(num) for num in part.split() if num.isdigit()] for part in line.strip().split('|')) for line in data]
     games = [1 for _ in cards]
     for i in range(len(cards)):
         winning_nums, ticket_nums = cards[i]
