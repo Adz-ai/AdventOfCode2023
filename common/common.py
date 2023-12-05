@@ -3,9 +3,13 @@ from pathlib import Path
 
 
 def path(file, day):
-    base_path = os.path.dirname(Path(__file__).parent)
-    data = read_file(os.path.join(base_path, day,"PuzzleInputFiles", file))
+    data = read_file(get_path(day, file))
     return data
+
+
+def get_path(day, file):
+    base_path = os.path.dirname(Path(__file__).parent)
+    return os.path.join(base_path, day, "PuzzleInputFiles", file)
 
 
 def read_file(file: str) -> list:
