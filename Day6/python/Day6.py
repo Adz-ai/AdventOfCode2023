@@ -11,7 +11,7 @@ def part_1(file):
     return math.prod(sum(1 for x in range(1, t) if x * (t - x) > d) for t, d in zip(time, distance))
 
 
-def part_2(file):  # Using Quadratic Formula For Efficiency
+def part_2(file): # Using Quadratic Formula For Efficiency
     data = path(file, "Day6")
     time, distance = map(lambda d: int(re.sub(r"\D+", "", d)), data)
     a, b, c = -1, time, -distance
@@ -19,12 +19,8 @@ def part_2(file):  # Using Quadratic Formula For Efficiency
     if discriminant < 0:
         return 0
     sqrt_discriminant = math.sqrt(discriminant)
-    x1 = (-b + sqrt_discriminant) / (2 * a)
-    x2 = (-b - sqrt_discriminant) / (2 * a)
-    lower_bound = max(1, math.ceil(min(x1, x2)))
-    upper_bound = min(time, math.floor(max(x1, x2)))
-    valid_x_range = max(0, upper_bound - lower_bound + 1)
-    return valid_x_range
+    x1, x2 = (-b + sqrt_discriminant) / (2 * a), (-b - sqrt_discriminant) / (2 * a)
+    return max(0, min(time, math.floor(max(x1, x2))) - max(1, math.ceil(min(x1, x2))) + 1)
 
 
 if __name__ == '__main__':
