@@ -58,8 +58,12 @@ def find_type_part_two(cards):
 def process_hand(file, find_type_func, translate_func):
     df = pd.read_csv(get_path("Day7", file), sep=' ', header=None, names=['cards', 'bid'])
     df['type'] = df['cards'].apply(find_type_func)
+
+    def translate_card(card, index):
+        return translate_func(card[index])
+
     for i in range(5):
-        df[f'card{i}'] = df['cards'].apply(lambda x, i=i: translate_func(x[i]))
+        df[f'card{i}'] = df['cards'].apply(translate_card, index=i)
     df = df.sort_values(by=['type', 'card0', 'card1', 'card2', 'card3', 'card4'],
                         ascending=[False, True, True, True, True, True])
     df = df.reset_index(drop=True)
