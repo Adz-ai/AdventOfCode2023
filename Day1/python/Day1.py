@@ -26,55 +26,40 @@ def find_number_in_string(s, reverse: bool):
 def part_2(file):
     num_in_str = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
     rev_num_in_str = [element[::-1] for element in num_in_str]
-    data = path(file,"Day1")
+    data = path(file, "Day1")
+
+    def extract_numbers(element, reverse=False):
+        words = rev_num_in_str if reverse else num_in_str
+        temp, ram = [], ""
+        for c in reversed(element) if reverse else element:
+            ram += c
+            if any(num in ram for num in words) or c.isnumeric():
+                number = str(find_number_in_string(ram, reverse)) if not c.isnumeric() else c
+                temp.append(number)
+                ram = ""
+        return temp
+
     final_numbers = []
     for element in data:
-        temp = []
-        reverse_temp = []
-        characters = list(element)
-        ram = ""
-        reverse_ram = ""
-        for c in characters:
-            ram += c
-            if any(num in ram for num in num_in_str):
-                temp.append(str(find_number_in_string(ram, False)))
-                ram = ""
-            if str(c).isnumeric():
-                ram = ""
-                temp.append(str(c))
-        for r in reversed(characters):
-            reverse_ram += r
-            if any(num in reverse_ram for num in rev_num_in_str):
-                reverse_temp.append(str(find_number_in_string(reverse_ram, True)))
-                reverse_ram = ""
-            if str(r).isnumeric():
-                reverse_ram = ""
-                reverse_temp.append(str(r))
-        if len(temp) != 1:
-            if reverse_temp[0] != 'None':
-                number = temp[0] + reverse_temp[0]
-            else:
-                number = temp[0] + temp[len(temp) - 1]
+        forward_nums = extract_numbers(element)
+        reverse_nums = extract_numbers(element, True)
+        number_str = forward_nums[0]
+        if reverse_nums or len(forward_nums) > 1:
+            number_str += reverse_nums[0] if reverse_nums else forward_nums[-1]
         else:
-            number = temp[0] + temp[0]
-        final_numbers.append(int(number))
+            number_str += forward_nums[0]
+        final_numbers.append(int(number_str))
     return sum(final_numbers)
 
 
 def part_1(file):
-    data = path(file,"Day1")
-    final_numbers = []
-    for element in data:
-        temp = []
-        characters = list(element)
-        for c in characters:
-            if str(c).isnumeric():
-                temp.append(str(c))
-        if len(temp) != 1:
-            number = temp[len(temp) - len(temp)] + temp[len(temp) - 1]
-        else:
-            number = temp[0] + temp[0]
-        final_numbers.append(int(number))
+    data = path(file, "Day1")
+
+    def extract_number(element):
+        nums = [c for c in element if c.isnumeric()]
+        return int(nums[0] + nums[-1]) if len(nums) > 1 else int(nums[0] * 2)
+
+    final_numbers = [extract_number(element) for element in data]
     return sum(final_numbers)
 
 
