@@ -7,9 +7,8 @@ This repository contains my personal solutions for the [Advent of Code 2023](htt
 Each day's puzzles are solved in separate files for clarity and ease of understanding. The solutions are primarily written in Python, focusing on readability and efficient coding practices.
 
 ### Folder Structure
-- `Day1/`: Solutions for Day 1
-- `Day2/`: Solutions for Day 2
-- `...`
+- `Dayx/`: Solutions for Day x
+- `common/`: Contains shared resources and utilities used across various solutions.
 
 ## Contributions
 While these solutions are primarily for my personal learning and exploration, suggestions and discussions are welcome! Feel free to open an issue or a pull request if you have ideas on how to improve the solutions.
