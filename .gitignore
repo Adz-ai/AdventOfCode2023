@@ -240,12 +240,10 @@ cython_debug/
 #.idea/
 
 # Data Files
-
-Day1/PuzzleInputFiles/day1input.txt
-Day2/PuzzleInputFiles/day2input.txt
-Day3/PuzzleInputFiles/day3input.txt
-Day4/PuzzleInputFiles/day4input.txt
-Day5/PuzzleInputFiles/day5input.txt
-Day6/PuzzleInputFiles/day6input.txt
-Day7/PuzzleInputFiles/day7input.txt
-
+!/Day1/PuzzleInputFiles/day1input.txt
+!/Day2/PuzzleInputFiles/day2input.txt
+!/Day3/PuzzleInputFiles/day3input.txt
+!/Day4/PuzzleInputFiles/day4input.txt
+!/Day5/PuzzleInputFiles/day5input.txt
+!/Day6/PuzzleInputFiles/day6input.txt
+!/Day7/PuzzleInputFiles/day7input.txt
