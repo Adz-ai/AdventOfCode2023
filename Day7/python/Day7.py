@@ -13,8 +13,7 @@ def translate(card):
 
 
 def translate_part_two(card):
-    """ Translates card labels to numerical values for Part 2, treating J as the weakest. """
-    card_values = {'A': 14, 'K': 13, 'Q': 12, 'T': 10, 'J': 1}  # J is now the weakest
+    card_values = {'A': 14, 'K': 13, 'Q': 12, 'T': 10, 'J': 1}
     return card_values.get(card, int(card)) if card.isdigit() else card_values[card]
 
 
@@ -56,30 +55,24 @@ def find_type_part_two(cards):
     return best_type
 
 
-def part_2(file):
+def process_hand(file, find_type_func, translate_func):
     df = pd.read_csv(get_path("Day7", file), sep=' ', header=None, names=['cards', 'bid'])
-    df['type'] = df['cards'].apply(find_type_part_two)
+    df['type'] = df['cards'].apply(find_type_func)
     for i in range(5):
-        df[f'card{i}'] = df['cards'].apply(lambda x, i=i: translate_part_two(x[i]))
+        df[f'card{i}'] = df['cards'].apply(lambda x, i=i: translate_func(x[i]))
     df = df.sort_values(by=['type', 'card0', 'card1', 'card2', 'card3', 'card4'],
                         ascending=[False, True, True, True, True, True])
     df = df.reset_index(drop=True)
     df['winning'] = df['bid'] * (df.index + 1)
-    total_winnings = df['winning'].sum()
-    return total_winnings
+    return df['winning'].sum()
 
 
 def part_1(file):
-    df = pd.read_csv(get_path("Day7", file), sep=' ', header=None, names=['cards', 'bid'])
-    df['type'] = df['cards'].apply(find_type)
-    for i in range(5):
-        df[f'card{i}'] = df['cards'].apply(lambda x, i=i: translate(x[i]))
-    df = df.sort_values(by=['type', 'card0', 'card1', 'card2', 'card3', 'card4'],
-                        ascending=[False, True, True, True, True, True])
-    df = df.reset_index(drop=True)
-    df['winning'] = df['bid'] * (df.index + 1)
-    total_winnings = df['winning'].sum()
-    return total_winnings
+    return process_hand(file, find_type, translate)
+
+
+def part_2(file):
+    return process_hand(file, find_type_part_two, translate_part_two)
 
 
 if __name__ == '__main__':
