@@ -76,5 +76,5 @@ def part_2(file):
 
 
 if __name__ == '__main__':
-    print(f"Part 1:{part_1('part1.txt')}")
-    print(f"Part 2: {part_2('part1.txt')}")
+    print(f"Part 1:{part_1('day7input.txt')}")
+    print(f"Part 2: {part_2('day7input.txt')}")
